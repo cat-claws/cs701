@@ -5,6 +5,8 @@ def get_model(name):
 	if name == 'resnet101':
 		m = models.resnet101(weights="IMAGENET1K_V1")
 		m.fc = nn.Linear(in_features=2048, out_features=20, bias=True)
+	elif name == 'csra_resnet50':
+		m = ResNet_CSRA(num_heads=1, lam=0.1, num_classes=20)
 
 	return m
 
@@ -82,7 +84,6 @@ model_urls = {
 
 
 
-
 class ResNet_CSRA(ResNet):
 	arch_settings = {
 		18: (BasicBlock, (2, 2, 2, 2)),
@@ -92,13 +93,14 @@ class ResNet_CSRA(ResNet):
 		152: (Bottleneck, (3, 8, 36, 3))
 	}
 
-	def __init__(self, num_heads, lam, num_classes, depth=101, input_dim=2048, cutmix=None):
+	def __init__(self, num_heads, lam, num_classes, depth=50, input_dim=2048, cutmix=None):
 		self.block, self.layers = self.arch_settings[depth]
 		self.depth = depth
 		super(ResNet_CSRA, self).__init__(self.block, self.layers)
 		self.init_weights(pretrained=True, cutmix=cutmix)
 
 		self.classifier = MHA(num_heads, lam, input_dim, num_classes) 
+		self.loss_func = F.binary_cross_entropy_with_logits
 
 	def backbone(self, x):
 		x = self.conv1(x)
@@ -117,3 +119,26 @@ class ResNet_CSRA(ResNet):
 		x = self.backbone(x)
 		x = self.classifier(x)
 		return x
+
+	def init_weights(self, pretrained=True, cutmix=None):
+		if cutmix is not None:
+			print("backbone params inited by CutMix pretrained model")
+			state_dict = torch.load(cutmix)
+		elif pretrained:
+			print("backbone params inited by Pytorch official model")
+			model_url = model_urls["resnet{}".format(self.depth)]
+			state_dict = model_zoo.load_url(model_url)
+
+		model_dict = self.state_dict()
+		try:
+			pretrained_dict = {k: v for k, v in state_dict.items() if k in model_dict}
+			self.load_state_dict(pretrained_dict)
+		except:
+			logger = logging.getLogger()
+			logger.info(
+				"the keys in pretrained model is not equal to the keys in the ResNet you choose, trying to fix...")
+			state_dict = self._keysFix(model_dict, state_dict)
+			self.load_state_dict(state_dict)
+
+		# remove the original 1000-class fc
+		self.fc = nn.Sequential() 

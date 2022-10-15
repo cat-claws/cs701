@@ -114,7 +114,7 @@ learningRate = 1e-3
 optimizer = torch.optim.Adam(m.parameters(), lr = learningRate)
 train_model(m, loss_fn, batchSize, utils.trainset, utils.valset, optimizer, 50)
 
-torch.save(m, 'resnet_cs701.pt')
+torch.save(m, 'csra_resnet50.pt')
 
 """#Eval"""
 
