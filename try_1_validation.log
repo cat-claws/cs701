@@ -1,30 +1,6 @@
-{'num_workers': 8, 'voc12_root': 'public/val_image/', 'train_list': 'data/public/val.json', 'val_list': 'data/public/val.json', 'infer_list': 'data/public/val.json', 'chainer_eval_set': 'train', 'cam_network': 'pipeline.resnet_cam', 'cam_crop_size': 512, 'cam_batch_size': 32, 'cam_num_epoches': 20, 'cam_learning_rate': 0.1, 'cam_weight_decay': 0.0001, 'cam_eval_thres': 0.15, 'cam_scales': (1.0, 0.5, 1.5, 2.0), 'conf_fg_thres': 0.3, 'conf_bg_thres': 0.05, 'irn_network': 'pipeline.resnet_irn', 'irn_crop_size': 512, 'irn_batch_size': 2, 'irn_num_epoches': 10, 'irn_learning_rate': 0.1, 'irn_weight_decay': 0.0001, 'beta': 10, 'exp_times': 8, 'ins_seg_bg_thres': 0.25, 'sem_seg_bg_thres': 0.25, 'log_name': 'sample_train_eval', 'cam_weights_name': 'sess/res101_cam.pth', 'irn_weights_name': 'sess/res101_irn.pth', 'cam_out_dir': 'result/try_1/validation/cam', 'ir_label_out_dir': 'result/try_1/validation/ir_label', 'sem_seg_out_dir': 'result/try_1/validation/sem_seg', 'ins_seg_out_dir': 'result/try_1/validation/ins_seg', 'train_cam_pass': False, 'make_cam_pass': False, 'eval_cam_pass': False, 'cam_to_ir_label_pass': True, 'train_irn_pass': True, 'make_ins_seg_pass': True, 'eval_ins_seg_pass': False, 'make_sem_seg_pass': True, 'eval_sem_seg_pass': False}
-step.cam_to_ir_label: Wed Oct 26 13:01:28 2022
-[ 0 5 10 15 20 25 30 35 40 45 50 55 60 65 70 75 80 85 90 95 100 ]
-step.train_irn: Wed Oct 26 13:12:18 2022
-Epoch 1/10
-step:    0/  870 loss:1.0270 0.5083 4.1669 0.1937 imps:0.7 lr: 0.1000 etc:Wed Oct 26 13:55:17 2022
-step:   50/  870 loss:0.6685 0.6726 3.8047 0.0274 imps:5.2 lr: 0.0948 etc:Wed Oct 26 13:17:54 2022
-step:  100/  870 loss:0.5834 0.5657 4.0277 0.0061 imps:5.5 lr: 0.0896 etc:Wed Oct 26 13:17:33 2022
-step:  150/  870 loss:0.5531 0.5365 4.1142 0.0032 imps:5.6 lr: 0.0843 etc:Wed Oct 26 13:17:29 2022
-step:  200/  870 loss:0.5721 0.5661 4.0596 0.0027 imps:5.7 lr: 0.0790 etc:Wed Oct 26 13:17:26 2022
-step:  250/  870 loss:0.5742 0.5660 4.0816 0.0026 imps:5.7 lr: 0.0737 etc:Wed Oct 26 13:17:26 2022
-step:  300/  870 loss:0.5272 0.5047 3.9784 0.0018 imps:5.7 lr: 0.0683 etc:Wed Oct 26 13:17:26 2022
-Epoch 2/10
-step:  350/  870 loss:0.5200 0.4856 4.0140 0.0013 imps:2.5 lr: 0.0629 etc:Wed Oct 26 13:17:27 2022
-step:  400/  870 loss:0.4869 0.4672 3.8080 0.0015 imps:5.5 lr: 0.0575 etc:Wed Oct 26 13:17:27 2022
-step:  450/  870 loss:0.5107 0.4944 3.6814 0.0012 imps:5.5 lr: 0.0519 etc:Wed Oct 26 13:17:27 2022
-step:  500/  870 loss:0.5101 0.4907 3.9522 0.0008 imps:5.5 lr: 0.0463 etc:Wed Oct 26 13:17:28 2022
-step:  550/  870 loss:0.4766 0.4658 3.9250 0.0007 imps:5.5 lr: 0.0407 etc:Wed Oct 26 13:17:29 2022
-step:  600/  870 loss:0.5014 0.4677 3.8242 0.0012 imps:5.5 lr: 0.0349 etc:Wed Oct 26 13:17:29 2022
-step:  650/  870 loss:0.4919 0.4573 3.7437 0.0007 imps:5.5 lr: 0.0290 etc:Wed Oct 26 13:17:30 2022
-Epoch 3/10
-step:  700/  870 loss:0.4677 0.4752 3.9466 0.0004 imps:1.9 lr: 0.0230 etc:Wed Oct 26 13:17:32 2022
-step:  750/  870 loss:0.4662 0.4434 3.7810 0.0003 imps:5.2 lr: 0.0168 etc:Wed Oct 26 13:17:32 2022
-step:  800/  870 loss:0.4733 0.4704 4.0153 0.0002 imps:5.3 lr: 0.0104 etc:Wed Oct 26 13:17:33 2022
-step:  850/  870 loss:0.4761 0.4631 3.6896 0.0001 imps:5.3 lr: 0.0034 etc:Wed Oct 26 13:17:33 2022
-step:  900/  870 loss:0.4946 0.4279 4.0397 0.0000 imps:5.4 lr: 0.0002 etc:Wed Oct 26 13:17:34 2022
-step:  950/  870 loss:0.4919 0.4158 4.0698 0.0000 imps:5.4 lr: 0.0002 etc:Wed Oct 26 13:17:34 2022
-step: 1000/  870 loss:0.4380 0.3934 3.8063 0.0000 imps:5.4 lr: 0.0002 etc:Wed Oct 26 13:17:35 2022
-Epoch 4/10
-step: 1050/  870 loss:0.5039 0.4806 4.0411 0.0000 imps:2.5 lr: 0.0002 etc:Wed Oct 26 13:17:35 2022
+{'num_workers': 8, 'voc12_root': 'public/val_image/', 'train_list': 'data/public/val.json', 'val_list': 'data/public/val.json', 'infer_list': 'data/public/val.json', 'chainer_eval_set': 'train', 'cam_network': 'pipeline.resnet_cam', 'cam_crop_size': 512, 'cam_batch_size': 32, 'cam_num_epoches': 20, 'cam_learning_rate': 0.1, 'cam_weight_decay': 0.0001, 'cam_eval_thres': 0.15, 'cam_scales': (1.0, 0.5, 1.5, 2.0), 'conf_fg_thres': 0.3, 'conf_bg_thres': 0.05, 'irn_network': 'pipeline.resnet_irn', 'irn_crop_size': 512, 'irn_batch_size': 2, 'irn_num_epoches': 3, 'irn_learning_rate': 0.1, 'irn_weight_decay': 0.0001, 'beta': 10, 'exp_times': 8, 'ins_seg_bg_thres': 0.25, 'sem_seg_bg_thres': 0.25, 'log_name': 'sample_train_eval', 'cam_weights_name': 'sess/res101_cam.pth', 'irn_weights_name': 'sess/res101_irn.pth', 'cam_out_dir': 'result/try_1/validation/cam', 'ir_label_out_dir': 'result/try_1/validation/ir_label', 'sem_seg_out_dir': 'result/try_1/validation/sem_seg', 'ins_seg_out_dir': 'result/try_1/validation/ins_seg', 'train_cam_pass': False, 'make_cam_pass': False, 'eval_cam_pass': False, 'cam_to_ir_label_pass': False, 'train_irn_pass': False, 'make_ins_seg_pass': False, 'eval_ins_seg_pass': False, 'make_sem_seg_pass': True, 'eval_sem_seg_pass': False}
+step.make_sem_seg_labels: Wed Oct 26 15:16:50 2022
+[/home/azureuser/working/cs701/cam_step/make_sem_seg_labels.py:30: FutureWarning: The input object of type 'Tensor' is an array-like implementing one of the corresponding protocols (`__array__`, `__array_interface__` or `__array_struct__`); but not a sequence (or 0-D). In the future, this object will be coerced as if it was first converted using `np.array(obj)`. To retain the old behaviour, you have to either modify the type 'Tensor', or assign to an empty array created with `np.empty(correct_shape, dtype=object)`.
+  orig_img_size = np.asarray(pack['size'])
+/home/azureuser/working/cs701/cam_step/make_sem_seg_labels.py:30: VisibleDeprecationWarning: Creating an ndarray from ragged nested sequences (which is a list-or-tuple of lists-or-tuples-or ndarrays with different lengths or shapes) is deprecated. If you meant to do this, you must specify 'dtype=object' when creating the ndarray.
+  orig_img_size = np.asarray(pack['size'])

@@ -98,10 +98,21 @@ def detect_instance(score_map, mask, class_id, max_fragment_size=0):
                 pred_score.append(np.max(ag_score * seg_mask))
             pred_label.append(ag_class)
             pred_mask.append(seg_mask)
-
-    return {'score': np.stack(pred_score, 0),
-           'mask': np.stack(pred_mask, 0),
-           'class': np.stack(pred_label, 0)}
+    if len(pred_score)==0:
+        score = np.array([])
+    else:
+        score = np.stack(pred_score, 0)
+    if len(pred_mask)==0:
+        mask = np.array([])
+    else:
+        mask = np.stack(pred_mask, 0)
+    if len(pred_label)==0:
+        label = np.array([])
+    else:
+        label = np.stack(pred_label, 0)
+    return {'score': score,
+           'mask': mask,
+           'class': label}
 
 
 def _work(process_id, model, dataset, args):
@@ -119,9 +130,7 @@ def _work(process_id, model, dataset, args):
             size = np.asarray(pack['size'])
 
             edge, dp = model(pack['img'][0].cuda(non_blocking=True))
-
             dp = dp.cpu().numpy()
-
             cam_dict = np.load(args.cam_out_dir + '/' + img_name + '.npy', allow_pickle=True).item()
 
             cams = cam_dict['cam'].cuda()
@@ -134,7 +143,8 @@ def _work(process_id, model, dataset, args):
             rw = indexing.propagate_to_edge(instance_cam, edge, beta=args.beta, exp_times=args.exp_times, radius=5)
 
             rw_up = F.interpolate(rw, scale_factor=4, mode='bilinear', align_corners=False)[:, 0, :size[0], :size[1]]
-            rw_up = rw_up / torch.max(rw_up)
+            if len(rw_up)!=0:
+            	rw_up = rw_up / torch.max(rw_up)
 
             rw_up_bg = F.pad(rw_up, (0, 0, 0, 0, 1, 0), value=args.ins_seg_bg_thres)
 

@@ -222,10 +222,10 @@ class EdgeDisplacement(Net):
     def forward(self, x):
         feat_size = (x.size(2)-1)//self.stride+1, (x.size(3)-1)//self.stride+1
 
-        x = F.pad(x, [0, self.crop_size-x.size(3), 0, self.crop_size-x.size(2)])
+        #x = F.pad(x, [0, self.crop_size-x.size(3), 0, self.crop_size-x.size(2)])
         edge_out, dp_out = super().forward(x)
-        edge_out = edge_out[..., :feat_size[0], :feat_size[1]]
-        dp_out = dp_out[..., :feat_size[0], :feat_size[1]]
+        edge_out = edge_out[..., :feat_size[0], :]
+        dp_out = dp_out[..., :feat_size[0], :]
 
         edge_out = torch.sigmoid(edge_out[0]/2 + edge_out[1].flip(-1)/2)
         dp_out = dp_out[0]
