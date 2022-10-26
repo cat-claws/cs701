@@ -51,7 +51,7 @@ if __name__ == '__main__':
     # Inter-pixel Relation Network (IRNet)
     parser.add_argument("--irn_network", default="pipeline.resnet_irn", type=str)
     parser.add_argument("--irn_crop_size", default=512, type=int)
-    parser.add_argument("--irn_batch_size", default=8, type=int)
+    parser.add_argument("--irn_batch_size", default=2, type=int)
     parser.add_argument("--irn_num_epoches", default=10, type=int)
     parser.add_argument("--irn_learning_rate", default=0.1, type=float)
     parser.add_argument("--irn_weight_decay", default=1e-4, type=float)
