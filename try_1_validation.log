@@ -1,19 +1,41 @@
 {'num_workers': 8, 'voc12_root': 'public/val_image/', 'train_list': 'data/public/val.json', 'val_list': 'data/public/val.json', 'infer_list': 'data/public/val.json', 'chainer_eval_set': 'train', 'cam_network': 'pipeline.resnet_cam', 'cam_crop_size': 512, 'cam_batch_size': 32, 'cam_num_epoches': 20, 'cam_learning_rate': 0.1, 'cam_weight_decay': 0.0001, 'cam_eval_thres': 0.15, 'cam_scales': (1.0, 0.5, 1.5, 2.0), 'conf_fg_thres': 0.3, 'conf_bg_thres': 0.05, 'irn_network': 'pipeline.resnet_irn', 'irn_crop_size': 512, 'irn_batch_size': 8, 'irn_num_epoches': 10, 'irn_learning_rate': 0.1, 'irn_weight_decay': 0.0001, 'beta': 10, 'exp_times': 8, 'ins_seg_bg_thres': 0.25, 'sem_seg_bg_thres': 0.25, 'log_name': 'sample_train_eval', 'cam_weights_name': 'sess/res101_cam.pth', 'irn_weights_name': 'sess/res101_irn.pth', 'cam_out_dir': 'result/try_1/validation/cam', 'ir_label_out_dir': 'result/try_1/validation/ir_label', 'sem_seg_out_dir': 'result/try_1/validation/sem_seg', 'ins_seg_out_dir': 'result/try_1/validation/ins_seg', 'train_cam_pass': False, 'make_cam_pass': False, 'eval_cam_pass': False, 'cam_to_ir_label_pass': False, 'train_irn_pass': True, 'make_ins_seg_pass': True, 'eval_ins_seg_pass': False, 'make_sem_seg_pass': True, 'eval_sem_seg_pass': False}
-step.train_irn: Wed Oct 26 12:08:29 2022
+step.train_irn: Wed Oct 26 20:21:41 2022
 Epoch 1/10
+step:    0/  870 loss:0.9734 0.4644 4.1833 0.1944 imps:0.5 lr: 0.1000 etc:Thu Oct 27 00:18:58 2022
 Traceback (most recent call last):
-  File "/home/azureuser/working/cs701/run_sample.py", line 121, in <module>
+  File "/home/ruihan/anaconda3/lib/python3.9/queue.py", line 179, in get
+    raise Empty
+_queue.Empty
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/ruihan/anaconda3/lib/python3.9/site-packages/torch/utils/data/dataloader.py", line 1163, in _try_get_data
+    data = self._data_queue.get(timeout=timeout)
+  File "/home/ruihan/anaconda3/lib/python3.9/queue.py", line 183, in get
+    return item
+  File "/home/ruihan/anaconda3/lib/python3.9/threading.py", line 260, in __exit__
+    return self._lock.__exit__(*args)
+  File "/home/ruihan/anaconda3/lib/python3.9/site-packages/torch/utils/data/_utils/signal_handling.py", line 66, in handler
+    _error_if_any_worker_fails()
+RuntimeError: DataLoader worker (pid 16978) is killed by signal: Killed. 
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ruihan/Downloads/cs701/run_sample.py", line 121, in <module>
     cam_step.train_irn.run(args)
-  File "/home/azureuser/working/cs701/cam_step/train_irn.py", line 62, in run
-    pos_aff_loss, neg_aff_loss, dp_fg_loss, dp_bg_loss = model(img, True)
-  File "/home/azureuser/working/anaconda3/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1130, in _call_impl
-    return forward_call(*input, **kwargs)
-  File "/home/azureuser/working/anaconda3/lib/python3.9/site-packages/torch/nn/parallel/data_parallel.py", line 166, in forward
-    return self.module(*inputs[0], **kwargs[0])
-  File "/home/azureuser/working/anaconda3/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1130, in _call_impl
-    return forward_call(*input, **kwargs)
-  File "/home/azureuser/working/cs701/pipeline/resnet_irn.py", line 209, in forward
-    dp_fg_loss = self.to_displacement_loss(pair_disp)
-  File "/home/azureuser/working/cs701/pipeline/resnet_irn.py", line 195, in to_displacement_loss
-    return torch.abs(pair_disp - self.disp_target)
-RuntimeError: CUDA out of memory. Tried to allocate 486.00 MiB (GPU 0; 14.76 GiB total capacity; 13.27 GiB already allocated; 172.81 MiB free; 13.40 GiB reserved in total by PyTorch) If reserved memory is >> allocated memory try setting max_split_size_mb to avoid fragmentation.  See documentation for Memory Management and PYTORCH_CUDA_ALLOC_CONF
+  File "/home/ruihan/Downloads/cs701/cam_step/train_irn.py", line 55, in run
+    for iter, pack in enumerate(train_data_loader):
+  File "/home/ruihan/anaconda3/lib/python3.9/site-packages/torch/utils/data/dataloader.py", line 681, in __next__
+    data = self._next_data()
+  File "/home/ruihan/anaconda3/lib/python3.9/site-packages/torch/utils/data/dataloader.py", line 1359, in _next_data
+    idx, data = self._get_data()
+  File "/home/ruihan/anaconda3/lib/python3.9/site-packages/torch/utils/data/dataloader.py", line 1315, in _get_data
+    success, data = self._try_get_data()
+  File "/home/ruihan/anaconda3/lib/python3.9/site-packages/torch/utils/data/dataloader.py", line 1176, in _try_get_data
+    raise RuntimeError('DataLoader worker (pid(s) {}) exited unexpectedly'.format(pids_str)) from e
+RuntimeError: DataLoader worker (pid(s) 16978) exited unexpectedly
+Exception in thread Thread-1:
+Traceback (most recent call last):
+  File "/home/ruihan/anaconda3/lib/python3.9/threading.py", line 973, in _bootstrap_inner
