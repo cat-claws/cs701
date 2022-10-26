@@ -5,7 +5,10 @@ import torch
 from torch.utils.data import Dataset
 import os.path
 import imageio
-from utils import imutils
+
+import sys
+sys.path.append('utils')
+import imutils
 import json
 IMG_FOLDER_NAME = "JPEGImages"
 ANNOT_FOLDER_NAME = "Annotations"

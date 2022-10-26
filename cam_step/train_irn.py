@@ -3,7 +3,9 @@ from torch.backends import cudnn
 cudnn.enabled = True
 from torch.utils.data import DataLoader
 from pipeline.dataset import DataSet
-from utils import pyutils, torchutils, indexing
+import sys
+sys.path.append('utils')
+import pyutils, torchutils, indexing
 import importlib
 from pipeline.dataloader import VOC12AffinityDataset, VOC12ImageDataset
 from pipeline.resnet_irn import AffinityDisplacementLoss
