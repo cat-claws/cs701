@@ -1,7 +1,10 @@
 import argparse
 import os
 
-from utils import pyutils
+import sys
+sys.path.append('utils')
+import pyutils
+# from utils import pyutils
 
 if __name__ == '__main__':
 
@@ -72,9 +75,9 @@ if __name__ == '__main__':
 
     # Step
     parser.add_argument("--train_cam_pass", default=False)
-    parser.add_argument("--make_cam_pass", default=True)
+    parser.add_argument("--make_cam_pass", default=False)
     parser.add_argument("--eval_cam_pass", default=False)
-    parser.add_argument("--cam_to_ir_label_pass", default=True)
+    parser.add_argument("--cam_to_ir_label_pass", default=False)
     parser.add_argument("--train_irn_pass", default=True)
     parser.add_argument("--make_ins_seg_pass", default=True)
     parser.add_argument("--eval_ins_seg_pass", default=False)
