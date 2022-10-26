@@ -51,7 +51,7 @@ def _work(process_id, infer_dataset, args):
 
 def run(args):
     file = "data/public/val.json"
-    dataset = VOC12ImageDataset(file, json_file_path="data/public/val_image/", img_normal=None, to_torch=False)
+    dataset = VOC12ImageDataset(file, "public/val_image/", img_normal=None, to_torch=False)
     dataset = torchutils.split_dataset(dataset, 8)
     print('[ ', end='')
     multiprocessing.spawn(_work, nprocs=args.num_workers, args=(dataset, args), join=True)

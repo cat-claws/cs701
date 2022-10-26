@@ -1,6 +1,6 @@
 CUDA_VISIBLE_DEVICES=0,1,2,4,5 python run_sample.py \
     --voc12_root public/val_image/ \
-    --num_workers 2 \
+    --num_workers 8 \
     --train_list  data/public/val.json\
     --val_list data/public/val.json \
     --infer_list data/public/val.json \
