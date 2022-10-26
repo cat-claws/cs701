@@ -1,13 +1,26 @@
 from torchvision import models
 import torch.nn as nn
+import torch.nn.functional as F
+
+def count_parameters(model):
+    return sum(p.numel() for p in model.parameters() if p.requires_grad)
+
 
 def get_model(name):
 	if name == 'resnet101':
 		m = models.resnet101(weights="IMAGENET1K_V1")
 		m.fc = nn.Linear(in_features=2048, out_features=20, bias=True)
+		# for name, param in m.named_parameters():                
+		# 	if name.startswith('conv1') or name.startswith('bn1') or name.startswith('layer1') or name.startswith('layer2'):
+		# 		param.requires_grad = False
+
 	elif name == 'csra_resnet50':
 		m = ResNet_CSRA(num_heads=1, lam=0.1, num_classes=20)
 
+	elif name == 'deeplab':
+		m = Modified(models.segmentation.deeplabv3_resnet101(models.segmentation.DeepLabV3_ResNet101_Weights.COCO_WITH_VOC_LABELS_V1))
+
+	print(f'The model has {count_parameters(m):,} trainable parameters')
 	return m
 
 from torchvision.models import ResNet
@@ -142,3 +155,25 @@ class ResNet_CSRA(ResNet):
 
 		# remove the original 1000-class fc
 		self.fc = nn.Sequential() 
+
+
+class FeatureExtractor(nn.Module):
+	def __init__(self, resnet_model):
+		super(FeatureExtractor, self).__init__()
+		# remove the last layer
+		self.truncated_resnet = nn.Sequential(*list(resnet_model.children())[:-1])
+	def forward(self, x):
+		feats = self.truncated_resnet(x)
+		return feats#.view(feats.size(0), -1)
+
+class Modified(nn.Module):
+	def __init__(self, pretrained_model):
+		super(Modified, self).__init__()
+		self.pretrained_model = pretrained_model
+	def forward(self, x):
+		out = self.pretrained_model(x)['out']
+		_, _, h, w = out.shape
+		pred = F.avg_pool2d(out[:, :-1], kernel_size=(h, w), padding=0)
+		pred = pred.view(pred.size(0), -1)
+		return pred
+

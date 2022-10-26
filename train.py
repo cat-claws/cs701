@@ -10,7 +10,7 @@ import torch.nn as nn
 from torch.nn import functional as F
 from torchvision import datasets, transforms
 
-m = backbones.get_model('resnet101')
+m = backbones.get_model('deeplab')
 m = m.to('cuda' if torch.cuda.is_available() else 'cpu')
 
 from sklearn.metrics import f1_score, accuracy_score
@@ -23,11 +23,13 @@ def train_model(model, loss_fn, batchSize, trainset, valset, optimizer, num_epoc
     # Shuffling is needed in case dataset is not shuffled by default.
     train_loader = torch.utils.data.DataLoader(dataset = trainset,
                                                 batch_size = batchSize,
-                                                shuffle = True)
+                                                shuffle = True,
+                                                num_workers= 4)
     # We don't need to bach the validation set but let's do it anyway.
     val_loader = torch.utils.data.DataLoader(dataset = valset,
                                             batch_size = batchSize,
-                                            shuffle = False) # No need.
+                                            shuffle = False,
+                                            num_workers= 4) # No need.
 
     # Define number of epochs.
     N = num_epochs
@@ -102,7 +104,7 @@ def train_model(model, loss_fn, batchSize, trainset, valset, optimizer, num_epoc
     
 
 # Pytorch DataLoader for iterating over batches.
-batchSize = 8
+batchSize = 4
 
 # Create the model.
 loss_fn = nn.BCEWithLogitsLoss()
@@ -112,144 +114,6 @@ learningRate = 1e-3
 
 # Optimizer.
 optimizer = torch.optim.Adam(m.parameters(), lr = learningRate)
-train_model(m, loss_fn, batchSize, utils.trainset, utils.valset, optimizer, 50)
+train_model(m, loss_fn, batchSize, utils.trainset_, utils.valset_, optimizer, 50)
 
 torch.save(m, 'csra_resnet50.pt')
-
-"""#Eval"""
-
-def eval_model(model, loss_fn, batchSize, valset):
-
-    # We don't need to bach the validation set but let's do it anyway.
-    val_loader = torch.utils.data.DataLoader(dataset = valset,
-                                                batch_size = batchSize,
-                                                shuffle = False) # No need.
-
-    val_accuracies = []
-    val_losses = []
-
-    # GPU enabling.
-    model = model.cuda()
-    loss_fn = loss_fn.cuda()
-
-    # Make a pass over the validation data.
-    correct = 0.0
-    cum_loss = 0.0
-    model.eval()
-    for (i, (inputs, labels)) in enumerate(val_loader):
-        inputs = inputs.cuda()
-        labels = labels.cuda()
-
-        # Forward pass. (Prediction stage)
-        # _, scores = model(inputs)
-        # scores = torch.stack([scores[:, k - 1] for k in [1, 2, 4, 5, 6, 7, 15, 17, 18, 19, 20, 21, 22, 23, 24, 29, 56, 63, 64, 69]], dim = 1)
-        # print(scores.shape)
-
-        scores = model(inputs)
-        
-        cum_loss += loss_fn(scores, labels).item()
-
-        # Count how many correct in this batch.
-        max_labels = scores > 0
-        correct += sum([f1_score(a, b) for a, b in zip(max_labels.detach().cpu(), labels.detach().cpu())])
-
-    val_accuracies.append(correct / len(valset))
-    val_losses.append(cum_loss / (i + 1))
-
-    # Logging the current results on validation.
-    print('Avg-Loss: %.4f, Accuracy: %.4f' % 
-        (cum_loss / (i + 1), correct / len(valset)))
-
-def predict(model, batchSize, valset):
-
-    # We don't need to bach the validation set but let's do it anyway.
-    val_loader = torch.utils.data.DataLoader(dataset = valset,
-                                                batch_size = batchSize,
-                                                shuffle = False) # No need.
-
-    val_predict = []
-    val_names = []
-
-    # GPU enabling.
-    model = model.cuda()
-
-    # Make a pass over the validation data.
-    model.eval()
-    for i, (name, inputs) in enumerate(val_loader):
-        inputs = inputs.cuda()
-
-        # Forward pass. (Prediction stage)
-        _, scores = model(inputs)
-        scores = torch.stack([scores[:, k - 1] for k in [1, 2, 4, 5, 6, 7, 15, 17, 18, 19, 20, 21, 22, 23, 24, 29, 56, 63, 64, 69]], dim = 1)
-        # print(scores.shape)
-
-        # scores = model(inputs)
-
-        # Count how many correct in this batch.
-        max_labels = scores > 0
-
-        val_predict.append(max_labels)
-        val_names.append(name)
-      
-    return val_predict, val_names
-
-# !rm -rf L2G; git clone https://github.com/PengtaoJiang/L2G.git
-
-from google.colab import drive
-drive.mount('/content/drive')
-
-import sys
-sys.path.append('L2G')
-import models
-m = torch.load('/content/drive/MyDrive/Colab Notebooks/CS701/resnet38_coco.pt')
-
-m = torch.load('/content/drive/MyDrive/Colab Notebooks/CS701/resnet50_cs701.pt')
-
-# Pytorch DataLoader for iterating over batches.
-batchSize = 8
-
-# Create the model.
-loss_fn = nn.BCEWithLogitsLoss()
-
-predicts, names = predict(m, batchSize, valset)
-
-valset[0][1].min()
-
-names = [x for n in names for x in n]
-
-doc = ''
-for s, p in enumerate(torch.cat(predicts, 0)):
-    doc = doc + names[s] + ' '
-    for c, pp in enumerate(p):
-        if pp:
-            doc = doc + str(c) + ' '
-    doc = doc + '\n'
-
-d2 = sorted(doc.split('\n'))
-
-print('\n'.join(d2))
-
-print(doc)
-
-# Pytorch DataLoader for iterating over batches.
-batchSize = 8
-
-# Create the model.
-loss_fn = nn.BCEWithLogitsLoss()
-
-eval_model(m, loss_fn, batchSize, valset)
-
-def view(x):
-    x.T
-
-import matplotlib.pyplot as plt
-
-plt.imshow(valset[0][0].T)
-
-valset[0][1]
-
-outputs = m(valset[0][0].unsqueeze(0).cuda())
-
-outputs[0].shape
-
-(outputs[1] > 0).long()
