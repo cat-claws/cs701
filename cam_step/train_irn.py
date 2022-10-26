@@ -28,7 +28,7 @@ def run(args):
                                 rescale=(0.5, 1.5)
                                 )
     train_data_loader = DataLoader(train_dataset, batch_size=32,
-                                   shuffle=True, num_workers=8, pin_memory=True, drop_last=True)
+                                   shuffle=True, num_workers=4, pin_memory=True, drop_last=True)
 
     max_step = (len(train_dataset) // 32) * args.irn_num_epoches
 

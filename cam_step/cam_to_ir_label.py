@@ -52,5 +52,5 @@ def run(args):
     dataset = VOC12ImageDataset(file, "public/val_image/", img_normal=None, to_torch=False)
     dataset = torchutils.split_dataset(dataset, 8)
     print('[ ', end='')
-    multiprocessing.spawn(_work, nprocs=args.num_workers, args=(dataset, args), join=True)
+    multiprocessing.spawn(_work, nprocs=8, args=(dataset, args), join=True)
     print(']')
