@@ -62,7 +62,7 @@ def run(args):
     model.eval()
 
     n_gpus = torch.cuda.device_count()
-    file = "data/public/val.json"
+    file = "data/public/test.json"
     dataset = VOC12ClassificationDatasetMSF(file,
                                             voc12_root=args.voc12_root,
                                             scales=(1.0,))

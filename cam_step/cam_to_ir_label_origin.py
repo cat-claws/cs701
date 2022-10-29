@@ -50,8 +50,8 @@ def _work(process_id, infer_dataset, args):
             print("%d " % ((5 * iter + 1) // (len(databin) // 20)), end='')
 
 def run(args):
-    file = "data/public/val.json"
-    dataset = VOC12ImageDataset(file, "public/val_image/", img_normal=None, to_torch=False)
+    file = "data/public/test.json"
+    dataset = VOC12ImageDataset(file, "public/test_image/", img_normal=None, to_torch=False)
     dataset = torchutils.split_dataset(dataset, 8)
     print('[ ', end='')
     multiprocessing.spawn(_work, nprocs=args.num_workers, args=(dataset, args), join=True)

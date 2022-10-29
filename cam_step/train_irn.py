@@ -16,10 +16,10 @@ def run(args):
 
     model = AffinityDisplacementLoss(path_index)
 
-    file = "data/public/val.json"
+    file = "data/public/test.json"
     train_dataset = VOC12AffinityDataset(file,
                                 label_dir=args.ir_label_out_dir,
-                                voc12_root="public/val_image/",
+                                voc12_root="public/test_image/",
                                 indices_from=path_index.src_indices,
                                 indices_to=path_index.dst_indices,
                                 hor_flip=True,
@@ -89,7 +89,7 @@ def run(args):
                       'etc:%s' % (timer.str_estimated_complete()), flush=True)
         else:
             timer.reset_stage()
-    file = "data/public/val.json"
+    file = "data/public/test.json"
     infer_dataset = VOC12ImageDataset(file,
                                         voc12_root=args.voc12_root,
                                         crop_size=args.irn_crop_size,

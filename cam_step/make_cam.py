@@ -71,10 +71,10 @@ def run(args):
 
     n_gpus = torch.cuda.device_count()
     
-    file = "data/public/val.json"
+    file = "data/public/test.json"
 
     dataset = VOC12ClassificationDatasetMSF(file,
-                         voc12_root="public/val_image/", scales=(1.0, 0.5, 1.5, 2.0))
+                         voc12_root="public/test_image/", scales=(1.0, 0.5, 1.5, 2.0))
     dataset = torchutils.split_dataset(dataset, n_gpus)
 
     print('[ ', end='')
